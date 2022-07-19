@@ -1,0 +1,25 @@
+name: 🚀 CI
+
+on: push
+
+jobs:
+  deploy:
+    name: 🎉 Deploy on server
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+    - name: 📂 Push to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd ${{ secrets.PROJECT_PATH }}
+          git pull origin master --ff-only
+          sudo docker-compose pull
+          sudo docker-compose -f docker-compose.prod.yml up -d --build
+          sudo docker-compose -f docker-compose.prod.yml restart
+          sudo docker system prune -a -f --filter "until=10h"     
+

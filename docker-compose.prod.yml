@@ -1,0 +1,48 @@
+version: '2'
+services:
+  smt_db:
+    container_name: smt_db
+    image: mariadb:10.8
+    volumes:
+      - ./db:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - proxy
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    
+  smt_wordpress:
+    container_name: smt_wordpress
+    depends_on:
+      - smt_db
+    image: wordpress:latest
+    volumes:
+      - ./data:/var/www/html/wp-content
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    restart: unless-stopped
+    networks:
+      - proxy
+    environment:
+      WORDPRESS_DB_HOST: smt_db
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_TABLE_PREFIX: ${DB_PREFIX}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.smt.entrypoints=http
+      - traefik.http.routers.smt.rule=Host("mycotra.ch", "www.mycotra.ch")
+      - traefik.http.middlewares.smt-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.smt.middlewares=smt-https-redirect
+      - traefik.http.routers.smt-secure.entrypoints=https
+      - traefik.http.routers.smt-secure.rule=Host("mycotra.ch", "www.mycotra.ch")
+      - traefik.http.routers.smt-secure.tls=true
+      - traefik.http.routers.smt-secure.tls.certresolver=http
+      - traefik.docker.network=proxy
+
+networks:
+  proxy:
+    external: true
