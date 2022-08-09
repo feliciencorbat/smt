@@ -7,7 +7,7 @@ services:
       - ./db:/var/lib/mysql
     restart: unless-stopped
     networks:
-      - proxy
+      - smt_backend
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
@@ -24,6 +24,7 @@ services:
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     restart: unless-stopped
     networks:
+      - smt_backend
       - proxy
     environment:
       WORDPRESS_DB_HOST: smt_db
@@ -44,5 +45,6 @@ services:
       - traefik.docker.network=proxy
 
 networks:
+  smt_backend:
   proxy:
     external: true
