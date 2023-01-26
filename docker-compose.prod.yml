@@ -49,7 +49,7 @@ services:
       - traefik.http.routers.smt-secure.tls.certresolver=http
       - traefik.docker.network=proxy
       
-    smt_redis:
+  smt_redis:
       container_name: smt_redis
       image: redis:7
       expose:
