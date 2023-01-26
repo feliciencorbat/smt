@@ -13,11 +13,13 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      MARIADB_AUTO_UPGRADE: 1
     
   smt_wordpress:
     container_name: smt_wordpress
     depends_on:
       - smt_db
+      - smt_redis
     image: wordpress:php8.1
     volumes:
       - ./data:/var/www/html/wp-content
@@ -32,6 +34,9 @@ services:
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
       WORDPRESS_DB_NAME: ${DB_NAME}
       WORDPRESS_TABLE_PREFIX: ${DB_PREFIX}
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_REDIS_HOST', 'smt_redis' );
+        define( 'WP_REDIS_PORT', 6379 );
     labels:
       - traefik.enable=true
       - traefik.http.routers.smt.entrypoints=http
@@ -43,6 +48,15 @@ services:
       - traefik.http.routers.smt-secure.tls=true
       - traefik.http.routers.smt-secure.tls.certresolver=http
       - traefik.docker.network=proxy
+      
+    smg_redis:
+      container_name: smt_redis
+      image: redis:7
+      expose:
+          - 6379
+      restart: unless-stopped
+      networks:
+           - smt_backend
 
 networks:
   smt_backend:
