@@ -18,7 +18,7 @@ jobs:
         script: |
           cd ${{ secrets.PROJECT_PATH }}
           git pull origin master --ff-only
-          sudo docker-compose pull
+          sudo docker-compose -f docker-compose.prod.yml pull
           sudo docker-compose -f docker-compose.prod.yml up -d --build
           sudo docker-compose -f docker-compose.prod.yml restart
           sudo docker system prune -a -f --filter "until=10h"     
