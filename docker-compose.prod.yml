@@ -40,11 +40,11 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.smt.entrypoints=http
-      - traefik.http.routers.smt.rule=Host("mycotra.champis.ch")
+      - traefik.http.routers.smt.rule=Host("mycotra.org", "www.mycotra.org")
       - traefik.http.middlewares.smt-https-redirect.redirectscheme.scheme=https
       - traefik.http.routers.smt.middlewares=smt-https-redirect
       - traefik.http.routers.smt-secure.entrypoints=https
-      - traefik.http.routers.smt-secure.rule=Host("mycotra.champis.ch")
+      - traefik.http.routers.smt-secure.rule=Host("mycotra.org", "www.mycotra.org")
       - traefik.http.routers.smt-secure.tls=true
       - traefik.http.routers.smt-secure.tls.certresolver=http
       - traefik.docker.network=proxy
