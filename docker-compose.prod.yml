@@ -49,7 +49,7 @@ services:
       - traefik.http.routers.smt-secure.tls.certresolver=http
       - traefik.docker.network=proxy
       - traefik.http.routers.smt-secure.middlewares=smt-org
-      - traefik.http.middlewares.smt-org.redirectregex.regex="^https://(.*)?mycotra.org(.*)"
+      - traefik.http.middlewares.smt-org.redirectregex.regex="^https://(.*)?mycotra.ch(.*)"
       - traefik.http.middlewares.smt-org.redirectregex.replacement="^https://mycotra.org$${2}"
       
   smt_redis:
