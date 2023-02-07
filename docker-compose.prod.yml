@@ -44,7 +44,7 @@ services:
       - traefik.http.middlewares.smt-https-redirect.redirectscheme.scheme=https
       - traefik.http.routers.smt.middlewares=smt-redirect, smt-https-redirect 
       - traefik.http.middlewares.smt-redirect.redirectregex.regex="^https?://mycotra.ch(.*)"
-      - traefik.http.middlewares.smt-redirect.redirectregex.replacement="^https://mycotra.org$${1}"
+      - traefik.http.middlewares.smt-redirect.redirectregex.replacement="https://mycotra.org$${1}"
       - traefik.http.routers.smt-secure.entrypoints=https
       - traefik.http.routers.smt-secure.rule=Host("mycotra.org", "www.mycotra.org", "mycotra.ch", "www.mycotra.ch")
       - traefik.http.routers.smt-secure.tls=true
