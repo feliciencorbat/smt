@@ -51,8 +51,8 @@ services:
       - traefik.http.routers.smt-secure.tls.certresolver=http
       - traefik.http.routers.smt-secure.middlewares=smt-redirect
       
-      - traefik.http.middlewares.smt-redirect.redirectregex.regex="^https?://(.*)mycotra\.ch(.*)"
-      - traefik.http.middlewares.smt-redirect.redirectregex.replacement="https://mycotra.org$${2}"
+      - traefik.http.middlewares.smt-redirect.redirectregex.regex=^https?://(.*)mycotra\.ch(.*)
+      - traefik.http.middlewares.smt-redirect.redirectregex.replacement=https://mycotra.org$${2}
       
       - traefik.docker.network=proxy
       
