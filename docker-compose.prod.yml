@@ -2,7 +2,7 @@ version: '2'
 services:
   smt_db:
     container_name: smt_db
-    image: mariadb:10.10
+    image: mariadb:11.2
     volumes:
       - ./db:/var/lib/mysql
     restart: unless-stopped
@@ -20,7 +20,7 @@ services:
     depends_on:
       - smt_db
       - smt_redis
-    image: wordpress:php8.1
+    image: wordpress:php8.3
     volumes:
       - ./data:/var/www/html/wp-content
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
